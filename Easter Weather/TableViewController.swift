@@ -10,7 +10,7 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var zipcode = [Int]()
+    var data = [WeatherData]()
     let zipCodeDelegate = ZipCodeTextFieldDelegate()
     
     @IBOutlet weak var tableView: UITableView!
@@ -43,17 +43,21 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return zipcode.count
+        return data.count
         
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("TemperatureCell") as! TemperatureCell
-        let zip = self.zipcode[indexPath.row]
+        let zip = self.data[indexPath.row].zipCode
         
         cell.zipCodeLabel.text = String(zip)
-        cell.temperatureLabel.text = String(75)
+        
+        if let temperature = data[indexPath.row].currentTemperature{
+            cell.temperatureLabel.text = String(format: "%.1f", temperature) + "°"
+        }else{cell.temperatureLabel.text = ""}
+        //cell.temperatureLabel.text = String(data[indexPath.row].currentTemperature)
         
         return cell
     }
@@ -62,7 +66,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == .Delete) {
-            zipcode.removeAtIndex(indexPath.row)
+            data.removeAtIndex(indexPath.row)
             
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
@@ -93,19 +97,20 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.zipCodeTextField.resignFirstResponder()
         if(zipCodeTextField.text?.characters.count == 5){
             let newZip = Int(zipCodeTextField.text!)!
-            zipcode.append(newZip)
+            let newWeatherData = WeatherData(zipCode: newZip)
+            data.append(newWeatherData)
             self.tableView.reloadData()
-            updateCurrentTemperature(newZip)
+            updateCurrentTemperature(newWeatherData)
         }
     }
     
     // MARK: API Request
-    private func updateCurrentTemperature(withZipCode: Int) {
+    private func updateCurrentTemperature(withData: WeatherData) {
         
         
         // create session and request
         let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: getCurrentWeatherURL(withZipCode))
+        let request = NSURLRequest(URL: getCurrentWeatherURL(withData.zipCode))
         
         // create network request
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
@@ -145,14 +150,20 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             
             
-            /* GUARD: Is the "photos" key in our result? */
-            guard let weatherDictionary = parsedResult["main"] as? [String:AnyObject] else {
+            guard let weatherDictionary = parsedResult["main"] as? [String:Double] else {
                 print(parsedResult)
                 return
             }
             
             print(parsedResult)
-            
+            if let temperature = weatherDictionary["temp"]{
+                print("yes")
+                print(temperature)
+                withData.currentTemperature = temperature
+                dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                    self.tableView.reloadData()
+                }
+            }
             
         }
         

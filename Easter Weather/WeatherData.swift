@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct WeatherData{
+class WeatherData{
     
     var zipCode:Int
     var latitude:Double?
