@@ -10,13 +10,17 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var data = SharedData.sharedInstance.data
+    let sharedData = SharedData.sharedInstance
+    
     let zipCodeDelegate = ZipCodeTextFieldDelegate()
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var zipCodeTextField: UITextField!
     
     
+    override func viewWillDisappear(animated: Bool) {
+    
+    }
     
     override func viewWillAppear(animated: Bool) {
         tableView.delegate = self
@@ -25,6 +29,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.tableView.tableFooterView = UIView(frame:CGRectZero)
         
         self.zipCodeTextField.delegate = self.zipCodeDelegate
+        
+        //sharedData.data = SharedData.sharedInstance.data
+        print(sharedData.data.count)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,18 +50,18 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return sharedData.data.count
         
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("TemperatureCell") as! TemperatureCell
-        let zip = self.data[indexPath.row].zipCode
+        let zip = self.sharedData.data[indexPath.row].zipCode
         
         cell.zipCodeLabel.text = String(zip)
         
-        if let temperature = data[indexPath.row].currentTemperature{
+        if let temperature = sharedData.data[indexPath.row].currentTemperature{
             cell.temperatureLabel.text = String(format: "%.1f", temperature) + "°"
         }else{cell.temperatureLabel.text = ""}
         //cell.temperatureLabel.text = String(data[indexPath.row].currentTemperature)
@@ -66,7 +73,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == .Delete) {
-            data.removeAtIndex(indexPath.row)
+            sharedData.data.removeAtIndex(indexPath.row)
             
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
@@ -98,7 +105,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         if(zipCodeTextField.text?.characters.count == 5){
             let newZip = Int(zipCodeTextField.text!)!
             let newWeatherData = WeatherData(zipCode: newZip)
-            data.append(newWeatherData)
+            sharedData.data.append(newWeatherData)
             self.tableView.reloadData()
             updateCurrentTemperature(newWeatherData)
         }
@@ -154,8 +161,16 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 print(parsedResult)
                 return
             }
-            
             print(parsedResult)
+            
+            if let coordDictionary = parsedResult["coord"] as? [String:Double]{
+                print("received coords")
+                withData.latitude = coordDictionary["lat"]
+                withData.longitude = coordDictionary["lon"]
+                print(withData.latitude)
+                print(withData.longitude)
+            }
+            
             if let temperature = weatherDictionary["temp"]{
                 print("yes")
                 print(temperature)
