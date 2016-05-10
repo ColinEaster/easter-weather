@@ -25,7 +25,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.tableView.tableFooterView = UIView(frame:CGRectZero)
         
         self.zipCodeTextField.delegate = self.zipCodeDelegate
-        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +52,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         let cell = tableView.dequeueReusableCellWithIdentifier("TemperatureCell") as! TemperatureCell
         let zip = self.zipcode[indexPath.row]
         
-        // Set the name and image
         cell.zipCodeLabel.text = String(zip)
         cell.temperatureLabel.text = String(75)
         
@@ -82,7 +80,11 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func doneButtonAction()
     {
         self.zipCodeTextField.resignFirstResponder()
-
+        if(zipCodeTextField.text?.characters.count == 5){
+            zipcode.append(Int(zipCodeTextField.text!)!)
+            self.tableView.reloadData()
+        }
     }
+    
 }
 
