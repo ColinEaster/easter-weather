@@ -10,7 +10,7 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var data = [WeatherData]()
+    var data = SharedData.sharedInstance.data
     let zipCodeDelegate = ZipCodeTextFieldDelegate()
     
     @IBOutlet weak var tableView: UITableView!

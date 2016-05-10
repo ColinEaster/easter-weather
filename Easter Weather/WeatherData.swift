@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+ A class that holds a zip code and weather data that relates to that zip code.
+ */
 class WeatherData{
     
     var zipCode:Int
@@ -19,4 +22,17 @@ class WeatherData{
     init(zipCode: Int){
         self.zipCode = zipCode
     }
+}
+
+/**
+ Singleton to hold weather data.
+ */
+class SharedData {
+    
+    // MARK: Public Variables
+    static let sharedInstance = SharedData()
+    
+    var data = [WeatherData]()
+    
+    var fahrenheit: Bool = true
 }
