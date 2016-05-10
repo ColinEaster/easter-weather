@@ -10,7 +10,7 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var zipcode = [17042, 18042]
+    var zipcode = [Int]()
     let zipCodeDelegate = ZipCodeTextFieldDelegate()
     
     @IBOutlet weak var tableView: UITableView!
@@ -56,6 +56,17 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.temperatureLabel.text = String(75)
         
         return cell
+    }
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == .Delete) {
+            zipcode.removeAtIndex(indexPath.row)
+            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
+        
     }
     // taken from http://iostechsolutions.blogspot.com/2014/11/swift-add-uitoolbar-or-done-button-on.html because the number pad doesn't have a return key... (and a touch gesture outside the keypad might conflict with selecting a cell)
     func addDoneButtonOnKeyboard()
