@@ -44,9 +44,9 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="juD-Zh-D9E" firstAttribute="leading" secondItem="IZd-Rs-dmS" secondAttribute="leadingMargin" constant="13" id="22o-ho-IDk"/>
-                                                <constraint firstAttribute="topMargin" secondItem="KKL-QQ-Zvi" secondAttribute="top" id="GYw-Y3-H9x"/>
+                                                <constraint firstItem="KKL-QQ-Zvi" firstAttribute="centerY" secondItem="IZd-Rs-dmS" secondAttribute="centerY" id="261-cc-1f9"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="KKL-QQ-Zvi" secondAttribute="trailing" constant="17" id="Loq-8T-zWq"/>
-                                                <constraint firstAttribute="topMargin" secondItem="juD-Zh-D9E" secondAttribute="top" id="SSQ-qn-dzk"/>
+                                                <constraint firstItem="juD-Zh-D9E" firstAttribute="centerY" secondItem="IZd-Rs-dmS" secondAttribute="centerY" id="Xmx-DM-BUm"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
