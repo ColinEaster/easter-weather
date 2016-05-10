@@ -21,6 +21,9 @@
 		3B7F93841CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */; };
 		3B7F93851CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */; };
 		3B7F93861CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */; };
+		3B7F93881CE246E0002BB46D /* OpenWeatherClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */; };
+		3B7F93891CE246E0002BB46D /* OpenWeatherClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */; };
+		3B7F938A1CE246E0002BB46D /* OpenWeatherClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +60,7 @@
 		3B24298D1CE0DE310030FE5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B7F937F1CE11806002BB46D /* TemperatureCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemperatureCell.swift; sourceTree = "<group>"; };
 		3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipCodeTextFieldDelegate.swift; sourceTree = "<group>"; };
+		3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenWeatherClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				3B2429691CE0DE300030FE5A /* AppDelegate.swift */,
+				3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */,
 				3B24296B1CE0DE300030FE5A /* TableViewController.swift */,
 				3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */,
 				3B7F937F1CE11806002BB46D /* TemperatureCell.swift */,
@@ -272,6 +277,7 @@
 				3B7F93841CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
 				3B24296E1CE0DE300030FE5A /* SecondViewController.swift in Sources */,
 				3B24296A1CE0DE300030FE5A /* AppDelegate.swift in Sources */,
+				3B7F93881CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
 				3B7F93801CE11806002BB46D /* TemperatureCell.swift in Sources */,
 				3B24296C1CE0DE300030FE5A /* TableViewController.swift in Sources */,
 			);
@@ -284,6 +290,7 @@
 				3B7F93811CE11806002BB46D /* TemperatureCell.swift in Sources */,
 				3B7F93851CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
 				3B2429811CE0DE310030FE5A /* Easter_WeatherTests.swift in Sources */,
+				3B7F93891CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,6 +301,7 @@
 				3B7F93821CE11806002BB46D /* TemperatureCell.swift in Sources */,
 				3B7F93861CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
 				3B24298C1CE0DE310030FE5A /* Easter_WeatherUITests.swift in Sources */,
+				3B7F938A1CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

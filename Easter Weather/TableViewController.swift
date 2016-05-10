@@ -92,10 +92,76 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     {
         self.zipCodeTextField.resignFirstResponder()
         if(zipCodeTextField.text?.characters.count == 5){
-            zipcode.append(Int(zipCodeTextField.text!)!)
+            let newZip = Int(zipCodeTextField.text!)!
+            zipcode.append(newZip)
             self.tableView.reloadData()
+            updateCurrentTemperature(newZip)
         }
     }
     
+    // MARK: API Request
+    private func updateCurrentTemperature(withZipCode: Int) {
+        
+        
+        // create session and request
+        let session = NSURLSession.sharedSession()
+        let request = NSURLRequest(URL: getCurrentWeatherURL(withZipCode))
+        
+        // create network request
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            // if an error occurs, print it and re-enable the UI
+            func displayError(error: String) {
+                print(error)
+                print("error")
+            }
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                displayError("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                displayError("Your request returned a status code other than 2xx!")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                displayError("No data was returned by the request!")
+                return
+            }
+            
+            // parse the data
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            } catch {
+                displayError("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            
+            
+            /* GUARD: Is the "photos" key in our result? */
+            guard let weatherDictionary = parsedResult["main"] as? [String:AnyObject] else {
+                print(parsedResult)
+                return
+            }
+            
+            print(parsedResult)
+            
+            
+        }
+        
+        // start the task
+        task.resume()
+    }
+    func getCurrentWeatherURL(zipCode: Int)->NSURL{
+        let url:String = Constants.ApiString + Methods.ZIP + String(zipCode) + ",us" + Constants.ApiKey
+        return NSURL(string: url)!
+    }
 }
 
