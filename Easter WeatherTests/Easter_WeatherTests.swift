@@ -21,11 +21,21 @@ class Easter_WeatherTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testToFahrenheit() {
+        XCTAssertEqual(Int(32), Int(toFahrenheit(273.15)))
+        XCTAssertEqual(Int(440.33), Int(toFahrenheit(500.0)))
+        XCTAssertEqual(Int(-99.67), Int(toFahrenheit(200.0)))
+        XCTAssertEqual(Int(-459), Int(toFahrenheit(0.0)))
+        XCTAssertEqual(Int(-5.17), Int(toFahrenheit(252.5)))
     }
     
+    func testToCelsius(){
+        XCTAssertEqual(Int(0), Int(toCelsius(273.15)))
+        XCTAssertEqual(Int(-273.15), Int(toCelsius(0)))
+        XCTAssertEqual(Int(50), Int(toCelsius(323.15)))
+        XCTAssertEqual(Int(100.73), Int(toCelsius(373.88)))
+        
+    }
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock {
