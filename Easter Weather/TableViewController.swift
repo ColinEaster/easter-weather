@@ -21,6 +21,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewWillAppear(animated: Bool) {
         tableView.delegate = self
         tableView.dataSource = self
+        
+        self.tableView.tableFooterView = UIView(frame:CGRectZero)
+        
         self.zipCodeTextField.delegate = self.zipCodeDelegate
         
     }
