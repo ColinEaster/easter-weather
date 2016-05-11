@@ -16,8 +16,19 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var zipCodeTextField: UITextField!
+    @IBOutlet weak var degreeChangeButton: UIButton!
     
     
+    @IBAction func degreeChangeButtonPressed(sender: UIButton) {
+        if(SharedData.sharedInstance.fahrenheit){
+            SharedData.sharedInstance.fahrenheit = false
+            sender.setTitle(Constants.degreesFahrenheit, forState: .Normal)
+        }else{
+            SharedData.sharedInstance.fahrenheit = true
+            sender.setTitle(Constants.degreesCelsius, forState: .Normal)
+        }
+        tableView.reloadData()
+    }
     override func viewWillDisappear(animated: Bool) {
     
     }
@@ -62,7 +73,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.zipCodeLabel.text = String(zip)
         
         if let temperature = sharedData.data[indexPath.row].currentTemperature{
-            cell.temperatureLabel.text = String(format: "%.1f", temperature) + "°"
+            cell.temperatureLabel.text = String(format: "%.1f", temperature) + SharedData.sharedInstance.degreeLabel
         }else{cell.temperatureLabel.text = ""}
         //cell.temperatureLabel.text = String(data[indexPath.row].currentTemperature)
         

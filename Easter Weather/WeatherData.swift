@@ -58,4 +58,11 @@ class SharedData {
     var data = [WeatherData]()
     
     var fahrenheit: Bool = true
+    
+    var degreeLabel: String{
+        get{
+            if(fahrenheit){return Constants.degreesFahrenheit}
+            return Constants.degreesCelsius
+        }
+    }
 }

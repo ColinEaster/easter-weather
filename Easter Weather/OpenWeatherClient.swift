@@ -19,6 +19,9 @@ struct Constants {
     static let ApiHost = "api.openweathermap.org"
     static let ApiPath = "/data/2.5"
     static let ApiString = "http://api.openweathermap.org/data/2.5"
+    
+    static let degreesFahrenheit = "°F"
+    static let degreesCelsius = "°C"
 }
 
 // MARK: Methods

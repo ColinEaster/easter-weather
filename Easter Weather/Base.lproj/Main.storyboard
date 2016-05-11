@@ -61,20 +61,33 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sbs-5D-dWd">
+                                <rect key="frame" x="534" y="48" width="46" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="°C">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="degreeChangeButtonPressed:" destination="9pv-A4-QxB" eventType="touchUpInside" id="ZHj-kk-jh5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="eJb-Sj-QNO" secondAttribute="trailing" constant="55" id="21P-w0-Vro"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="eJb-Sj-QNO" secondAttribute="trailing" constant="71" id="21P-w0-Vro"/>
                             <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="quH-d9-HFu" secondAttribute="bottom" constant="50" id="Mi7-DC-pOA"/>
                             <constraint firstItem="quH-d9-HFu" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="-20" id="Mrd-Md-wVs"/>
+                            <constraint firstItem="Sbs-5D-dWd" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="28" id="POi-rb-1p4"/>
                             <constraint firstItem="eJb-Sj-QNO" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="30" id="VTJ-hn-jXH"/>
-                            <constraint firstItem="eJb-Sj-QNO" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="56" id="VYB-2t-WI9"/>
+                            <constraint firstItem="eJb-Sj-QNO" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="20" id="VYB-2t-WI9"/>
+                            <constraint firstItem="Sbs-5D-dWd" firstAttribute="leading" secondItem="eJb-Sj-QNO" secondAttribute="trailing" constant="15" id="f0A-TP-4w4"/>
                             <constraint firstItem="quH-d9-HFu" firstAttribute="top" secondItem="eJb-Sj-QNO" secondAttribute="bottom" constant="13" id="vg2-lI-1JT"/>
                             <constraint firstAttribute="trailingMargin" secondItem="quH-d9-HFu" secondAttribute="trailing" constant="-20" id="xfW-Og-r7n"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
                     <connections>
+                        <outlet property="degreeChangeButton" destination="Sbs-5D-dWd" id="PaP-lw-5au"/>
                         <outlet property="tableView" destination="quH-d9-HFu" id="G1t-fM-0IP"/>
                         <outlet property="zipCodeTextField" destination="eJb-Sj-QNO" id="EW1-Bc-1Kh"/>
                     </connections>
