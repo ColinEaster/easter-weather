@@ -54,7 +54,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.zipCodeTextField.delegate = self.zipCodeDelegate
         
-        print(sharedData.data.count)
         self.navigationController?.navigationBarHidden = true
     }
     override func viewDidLoad() {

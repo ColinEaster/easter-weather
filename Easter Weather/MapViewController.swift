@@ -27,7 +27,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.delegate = self
         
         var annotations = [MKPointAnnotation]()
-        print(sharedData.data.count)
+        
         for datum in sharedData.data {
             
             // skip this entry if it doesn't have a lat/long
