@@ -13,4 +13,6 @@ class TemperatureCell: UITableViewCell {
     @IBOutlet weak var zipCodeLabel: UILabel!
     
     @IBOutlet weak var temperatureLabel: UILabel!
+    
+    
 }

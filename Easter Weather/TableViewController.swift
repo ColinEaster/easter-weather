@@ -313,12 +313,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             
             
-//            guard let list = parsedResult["list"] as? [AnyObject] else{
-//                print("couldn't parse list")
-//                return
-//            }
-//            //print(list)
-//          
             var fiveDayArray = [DailyForecast]()
             guard let list = parsedResult.objectForKey("list") as? [AnyObject] else{
                 print("couldn't parse list")
@@ -336,8 +330,17 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 fiveDayArray.append(forecast)
             }
             print(fiveDayArray)
+            dispatch_async(dispatch_get_main_queue()){
+                self.instantiateDetailView(fiveDayArray)
+            }
         }
         task.resume()
+    }
+    func instantiateDetailView(fiveDayArray: [DailyForecast]){
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
+        controller.fiveDayArray = fiveDayArray
+        //navigationController!.pushViewController(controller, animated: true)
+        presentViewController(controller, animated: true, completion: nil)
     }
     func getCurrentWeatherURL(zipCode: Int)->NSURL{
         let url:String = Constants.ApiString + Methods.ZIP + String(zipCode) + ",us" + Constants.ApiKey

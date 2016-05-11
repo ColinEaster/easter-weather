@@ -34,6 +34,12 @@
 		3B7F93971CE2CF19002BB46D /* CurrentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93951CE2CF19002BB46D /* CurrentLocation.swift */; };
 		3B7F93981CE2CF19002BB46D /* CurrentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93951CE2CF19002BB46D /* CurrentLocation.swift */; };
 		3B7F939A1CE2CF94002BB46D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7F93991CE2CF94002BB46D /* CoreLocation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		3B7F939C1CE3175F002BB46D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939B1CE3175F002BB46D /* DetailViewController.swift */; };
+		3B7F939D1CE3175F002BB46D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939B1CE3175F002BB46D /* DetailViewController.swift */; };
+		3B7F939E1CE3175F002BB46D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939B1CE3175F002BB46D /* DetailViewController.swift */; };
+		3B7F93A01CE3191C002BB46D /* DetailViewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */; };
+		3B7F93A11CE3191C002BB46D /* DetailViewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */; };
+		3B7F93A21CE3191C002BB46D /* DetailViewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +81,8 @@
 		3B7F93911CE2B6E7002BB46D /* Default Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Default Settings.plist"; sourceTree = "<group>"; };
 		3B7F93951CE2CF19002BB46D /* CurrentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentLocation.swift; sourceTree = "<group>"; };
 		3B7F93991CE2CF94002BB46D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3B7F939B1CE3175F002BB46D /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewTableCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,11 +138,10 @@
 				3B2429691CE0DE300030FE5A /* AppDelegate.swift */,
 				3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */,
 				3B7F93951CE2CF19002BB46D /* CurrentLocation.swift */,
-				3B24296B1CE0DE300030FE5A /* TableViewController.swift */,
 				3B7F938B1CE25E0D002BB46D /* WeatherData.swift */,
 				3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */,
-				3B7F937F1CE11806002BB46D /* TemperatureCell.swift */,
-				3B24296D1CE0DE300030FE5A /* SecondViewController.swift */,
+				3B7F93A41CE31A2F002BB46D /* Controller */,
+				3B7F93A31CE3193B002BB46D /* View */,
 				3B24296F1CE0DE300030FE5A /* Main.storyboard */,
 				3B2429721CE0DE300030FE5A /* Assets.xcassets */,
 				3B2429741CE0DE300030FE5A /* LaunchScreen.storyboard */,
@@ -160,6 +167,25 @@
 				3B24298D1CE0DE310030FE5A /* Info.plist */,
 			);
 			path = "Easter WeatherUITests";
+			sourceTree = "<group>";
+		};
+		3B7F93A31CE3193B002BB46D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */,
+				3B7F937F1CE11806002BB46D /* TemperatureCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		3B7F93A41CE31A2F002BB46D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3B24296B1CE0DE300030FE5A /* TableViewController.swift */,
+				3B7F939B1CE3175F002BB46D /* DetailViewController.swift */,
+				3B24296D1CE0DE300030FE5A /* SecondViewController.swift */,
+			);
+			name = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -296,6 +322,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B7F939C1CE3175F002BB46D /* DetailViewController.swift in Sources */,
 				3B7F93841CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
 				3B24296E1CE0DE300030FE5A /* SecondViewController.swift in Sources */,
 				3B7F938C1CE25E0D002BB46D /* WeatherData.swift in Sources */,
@@ -303,6 +330,7 @@
 				3B7F93961CE2CF19002BB46D /* CurrentLocation.swift in Sources */,
 				3B7F93881CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
 				3B7F93801CE11806002BB46D /* TemperatureCell.swift in Sources */,
+				3B7F93A01CE3191C002BB46D /* DetailViewTableCell.swift in Sources */,
 				3B24296C1CE0DE300030FE5A /* TableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,10 +341,12 @@
 			files = (
 				3B7F93971CE2CF19002BB46D /* CurrentLocation.swift in Sources */,
 				3B7F93811CE11806002BB46D /* TemperatureCell.swift in Sources */,
+				3B7F93A11CE3191C002BB46D /* DetailViewTableCell.swift in Sources */,
 				3B7F938D1CE25E0D002BB46D /* WeatherData.swift in Sources */,
 				3B7F93851CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
 				3B2429811CE0DE310030FE5A /* Easter_WeatherTests.swift in Sources */,
 				3B7F93891CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
+				3B7F939D1CE3175F002BB46D /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,10 +356,12 @@
 			files = (
 				3B7F93981CE2CF19002BB46D /* CurrentLocation.swift in Sources */,
 				3B7F93821CE11806002BB46D /* TemperatureCell.swift in Sources */,
+				3B7F93A21CE3191C002BB46D /* DetailViewTableCell.swift in Sources */,
 				3B7F938E1CE25E0D002BB46D /* WeatherData.swift in Sources */,
 				3B7F93861CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
 				3B24298C1CE0DE310030FE5A /* Easter_WeatherUITests.swift in Sources */,
 				3B7F938A1CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
+				3B7F939E1CE3175F002BB46D /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
