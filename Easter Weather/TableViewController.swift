@@ -312,7 +312,29 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 return
             }
             
-            print(parsedResult)
+            
+//            guard let list = parsedResult["list"] as? [AnyObject] else{
+//                print("couldn't parse list")
+//                return
+//            }
+//            //print(list)
+//          
+            var fiveDayArray = [DailyForecast]()
+            var loc = parsedResult.objectForKey("list") as! [AnyObject]
+            for i in loc {
+                let time = i["dt"] as! Double
+                let date = self.dayStringFromTime(time)
+                
+                let minTemp = i["temp"]!!["min"] as! Double
+                let maxTemp = i["temp"]!!["max"] as! Double
+                
+                let forecast = DailyForecast(date: date, minTempKelvin: minTemp, maxTempKelvin: maxTemp)
+                fiveDayArray.append(forecast)
+//                print(i["dt"])
+//                print(i["temp"]!!["min"])
+//                i["temp"]!!["min"]
+            }
+            print(fiveDayArray)
         }
         task.resume()
     }
@@ -330,5 +352,14 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         return NSURL(string: url)
     }
     
+    func dayStringFromTime(unixTime: Double) -> String {
+        let date = NSDate(timeIntervalSince1970: unixTime)
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.locale = NSLocale(localeIdentifier: NSLocale.currentLocale().localeIdentifier)
+        dateFormatter.dateFormat = "EEEE"
+        //dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle //Set date style
+        //dateFormatter.timeZone = NSTimeZone()
+        return dateFormatter.stringFromDate(date)
+    }
 }
 

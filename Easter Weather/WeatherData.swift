@@ -66,3 +66,33 @@ class SharedData {
         }
     }
 }
+
+struct DailyForecast{
+    var date:String
+    var minTemp:Double {
+        get{
+        if(SharedData.sharedInstance.fahrenheit){return toFahrenheit(minTempKelvin)}
+        return toCelsius(minTempKelvin)
+    }
+        set(newValue){
+        minTempKelvin = newValue
+        }
+    }
+    var maxTemp:Double {
+        get{
+            if(SharedData.sharedInstance.fahrenheit){return toFahrenheit(maxTempKelvin)}
+            return toCelsius(maxTempKelvin)
+        }
+        set(newValue){
+            maxTempKelvin = newValue
+        }
+    }
+    var minTempKelvin:Double
+    var maxTempKelvin:Double
+    
+    init(date:String, minTempKelvin:Double, maxTempKelvin: Double){
+        self.date = date
+        self.minTempKelvin = minTempKelvin
+        self.maxTempKelvin = maxTempKelvin
+    }
+}
