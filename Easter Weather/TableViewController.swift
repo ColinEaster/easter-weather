@@ -121,6 +121,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         // show 5 day view
+        getForecastForWeatherData(sharedData.data[indexPath.row])
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -153,6 +154,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         
     }
+    
     // taken from http://iostechsolutions.blogspot.com/2014/11/swift-add-uitoolbar-or-done-button-on.html because the number pad doesn't have a return key... (and a touch gesture outside the keypad might conflict with selecting a cell)
     func addDoneAndCurrentLocationButtonsOnKeyboard()
     {
@@ -262,9 +264,70 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         // start the task
         task.resume()
     }
+    
+    private func getForecastForWeatherData(weatherData:WeatherData){
+        print("getting forecast")
+        guard let url = getForecastURL(weatherData) else{
+            zipCodeTextField.text = "Can't get detailed data."
+            return
+        }
+        print(url)
+        // create session and request
+        let session = NSURLSession.sharedSession()
+        let request = NSURLRequest(URL: url)
+        
+        // create network request
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            // if an error occurs, print it and re-enable the UI
+            func displayError(error: String) {
+                print(error)
+                print("error")
+            }
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                displayError("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                displayError("Your request returned a status code other than 2xx!")
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                displayError("No data was returned by the request!")
+                return
+            }
+            
+            // parse the data
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            } catch {
+                displayError("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            print(parsedResult)
+        }
+        task.resume()
+    }
     func getCurrentWeatherURL(zipCode: Int)->NSURL{
         let url:String = Constants.ApiString + Methods.ZIP + String(zipCode) + ",us" + Constants.ApiKey
         return NSURL(string: url)!
+    }
+    func getForecastURL(weatherData: WeatherData)->NSURL?{
+        guard let lat = weatherData.latitude, long = weatherData.longitude else{
+            print("no long/lat")
+            return nil
+        }
+    
+        let url:String = Constants.ApiString + Methods.Forecast + "lat=\(lat)&lon=\(long)" + Constants.ApiKey
+        return NSURL(string: url)
     }
 }
 
