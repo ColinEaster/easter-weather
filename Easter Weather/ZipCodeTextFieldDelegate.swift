@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+/**
+ This delegate makes sure that only a zip code can be entered.
+ */
 class ZipCodeTextFieldDelegate: NSObject, UITextFieldDelegate {
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {

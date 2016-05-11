@@ -66,7 +66,9 @@ class SharedData {
         }
     }
 }
-
+/**
+ A struct that holds the data for a single day's forecast.
+ */
 struct DailyForecast{
     var date:String
     var minTemp:Double {

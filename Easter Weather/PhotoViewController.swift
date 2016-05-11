@@ -9,12 +9,21 @@
 import UIKit
 
 class PhotoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
+    //MARK: Properties
     var currentTemperature:String!
     
     @IBOutlet weak var temperatureLabel: UILabel!
     
     @IBOutlet weak var imageView: UIImageView!
+    
+    // MARK: –
+    override func viewDidLoad() {
+        temperatureLabel.text = currentTemperature
+        takeAPhoto()
+    }
+    
+    // MARK: Image Picker Delegate Methods and Support
     
     // Called after the user hits cancel in the image picker
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -22,10 +31,6 @@ class PhotoViewController: UIViewController, UIImagePickerControllerDelegate, UI
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    override func viewDidLoad() {
-        temperatureLabel.text = currentTemperature
-        takeAPhoto()
-    }
     func takeAPhoto() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self

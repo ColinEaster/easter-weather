@@ -10,6 +10,7 @@ import UIKit
 
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LocationGetterDelegate {
     
+    // MARK: Properties
     let sharedData = SharedData.sharedInstance
     let storedData = NSUserDefaults.standardUserDefaults()
     let locationGetter = LocationGetter()
@@ -32,6 +33,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.reloadData()
         storedData.setBool(sharedData.fahrenheit, forKey: "displayFahrenheit")
     }
+    
+    // MARK: Loading and disappearing methods
     override func viewWillDisappear(animated: Bool) {
         print("view will disappear")
         var zipCodeArray = [Int]()
@@ -49,7 +52,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.zipCodeTextField.delegate = self.zipCodeDelegate
         
-        //sharedData.data = SharedData.sharedInstance.data
         print(sharedData.data.count)
         self.navigationController?.navigationBarHidden = true
     }
@@ -57,11 +59,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         super.viewDidLoad()
         
         self.addDoneAndCurrentLocationButtonsOnKeyboard()
-        
-        // RESET PERSISTENT DATA
-        //let appDomain = NSBundle.mainBundle().bundleIdentifier!
-        //NSUserDefaults.standardUserDefaults().removePersistentDomainForName(appDomain)
-        
         
         
         // set defaults
@@ -89,6 +86,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         if(fahrenheit){degreeChangeButton.setTitle(Constants.degreesCelsius, forState: .Normal)}
         else{degreeChangeButton.setTitle(Constants.degreesFahrenheit, forState: .Normal)}
     }
+    
+    // MARK: Current Location Methods
     func startGettingCurrentLocation(){
         self.zipCodeTextField.resignFirstResponder()
         self.zipCodeTextField.text = "Retrieving current location..."
@@ -114,11 +113,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func alreadyFoundCurrentZipCode(){
         zipCodeTextField.text = "Already found the current location."
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+    
+    // MARK: TableView Delegate Methods
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         // show 5 day view

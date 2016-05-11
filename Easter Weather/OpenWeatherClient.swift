@@ -24,7 +24,7 @@ struct Constants {
     static let degreesCelsius = "°C"
 }
 
-// MARK: Methods
+// MARK: Methods and Parameters
 struct Methods {
     
     // MARK: Weather by zip code

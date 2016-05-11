@@ -10,10 +10,13 @@ import Foundation
 import CoreLocation
 
 class LocationGetter: NSObject, CLLocationManagerDelegate{
+    
+    // MARK: Properties
     let locationManager = CLLocationManager()
     var delegate: LocationGetterDelegate?
     var foundZipCode = false
     
+    // MARK: Init
     override init(){
         print("init location getter")
         super.init()
@@ -22,10 +25,14 @@ class LocationGetter: NSObject, CLLocationManagerDelegate{
         locationManager.requestWhenInUseAuthorization()
         
     }
+    /**
+    Starts the process of getting the current location.
+    */
     func startGettingZipCode(){
         if(foundZipCode){delegate?.alreadyFoundCurrentZipCode();return}
         locationManager.startUpdatingLocation()
     }
+    // MARK: Location Manager Delegate Methods
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         locationManager.stopUpdatingLocation()
         print("Error while updating location " + error.localizedDescription)
@@ -49,7 +56,7 @@ class LocationGetter: NSObject, CLLocationManagerDelegate{
         })
     }
     
-    func retreiveZipCodeFromPlacemark(placemark: CLPlacemark)->Int {
+    private func retreiveZipCodeFromPlacemark(placemark: CLPlacemark)->Int {
         
         print("Current zip code: \(placemark.postalCode)")
         
@@ -63,6 +70,7 @@ class LocationGetter: NSObject, CLLocationManagerDelegate{
         return 0
     }
 }
+// MARK: LocationGetterDelegate
 protocol LocationGetterDelegate {
     func receiveCurrentZipCode(zipCode: Int)
     func couldNotGetCurrentZipCode()
