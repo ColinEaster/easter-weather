@@ -116,7 +116,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // MARK: TableView Delegate Methods
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         // show 5 day view
         getForecastForWeatherData(sharedData.data[indexPath.row])
     }
