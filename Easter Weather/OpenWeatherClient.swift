@@ -38,10 +38,15 @@ struct Methods {
     static let Count = "&cnt="
 }
 
+/**
+ MARK: OpenWeatherClient
+ */
 class OpenWeatherClient{
     
+    // MARK: Property
     var delegate: OpenWeatherClientDelegate?
     
+    // MARK: Network Request Methods
     func updateCurrentTemperature(withData: WeatherData) {
         
         
@@ -193,12 +198,12 @@ class OpenWeatherClient{
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: NSLocale.currentLocale().localeIdentifier)
         dateFormatter.dateFormat = "EEEE"
-        dateFormatter.timeZone = NSTimeZone.localTimeZone() // should put it in the correct time zone, but I haven't tested it enough
+        dateFormatter.timeZone = NSTimeZone.localTimeZone() // should put it in the correct time zone
         return dateFormatter.stringFromDate(date)
     }
 }
 
-
+// MARK: Protocol
 protocol OpenWeatherClientDelegate {
     func receivedUpdatedCurrentTemperature()
     func receivedForecast(fiveDayForecast: [DailyForecast], currentTemperature: String)
