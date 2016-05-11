@@ -32,8 +32,8 @@ struct Methods {
     static let CountryCode = ",us"
     
     // MARK: 5 day forecast
-    static let Forecast = "/forecast?"
+    static let Forecast = "/forecast/daily?"
     static let Latitude = "lat="
     static let Longitude = "&lon="
-    
+    static let Count = "&cnt="
 }

@@ -326,8 +326,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             return nil
         }
     
-        let url:String = Constants.ApiString + Methods.Forecast + "lat=\(lat)&lon=\(long)" + Constants.ApiKey
+        let url:String = Constants.ApiString + Methods.Forecast + "lat=\(lat)&lon=\(long)" + Methods.Count + "5" + Constants.ApiKey
         return NSURL(string: url)
     }
+    
 }
 
