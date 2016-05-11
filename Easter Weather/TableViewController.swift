@@ -83,11 +83,50 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         
     }
+    
     private func setDefaultTemperatureUnit(fahrenheit: Bool){
         sharedData.fahrenheit = fahrenheit
         if(fahrenheit){degreeChangeButton.setTitle(Constants.degreesCelsius, forState: .Normal)}
         else{degreeChangeButton.setTitle(Constants.degreesFahrenheit, forState: .Normal)}
     }
+    
+    // taken from http://iostechsolutions.blogspot.com/2014/11/swift-add-uitoolbar-or-done-button-on.html because the number pad doesn't have a return key... (and a touch gesture outside the keypad might conflict with selecting a cell)
+    func addDoneAndCurrentLocationButtonsOnKeyboard() {
+        
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRectMake(0, 0, self.tableView.bounds.size.width, 50))
+        doneToolbar.barStyle = .Default
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+        
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(TableViewController.doneButtonAction))
+        
+        let currentLocationButton: UIBarButtonItem = UIBarButtonItem(title: "Use Current Location", style: .Done, target: self, action: #selector(TableViewController.startGettingCurrentLocation))
+        
+        var items = [UIBarButtonItem]()
+        items.append(currentLocationButton)
+        items.append(flexSpace)
+        items.append(done)
+        doneToolbar.items = items
+        
+        doneToolbar.sizeToFit()
+        
+        self.zipCodeTextField.inputAccessoryView = doneToolbar
+        self.zipCodeTextField.inputAccessoryView = doneToolbar
+        
+    }
+    
+    func doneButtonAction() {
+        self.zipCodeTextField.resignFirstResponder()
+        if(zipCodeTextField.text?.characters.count == 5){
+            let newZip = Int(zipCodeTextField.text!)!
+            
+            let newWeatherData = WeatherData(zipCode: newZip)
+            sharedData.data.append(newWeatherData)
+            self.tableView.reloadData()
+            openWeatherClient.updateCurrentTemperature(newWeatherData)
+        }
+    }
+    
     
     // MARK: Current Location Methods
     func startGettingCurrentLocation(){
@@ -153,206 +192,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
-    // taken from http://iostechsolutions.blogspot.com/2014/11/swift-add-uitoolbar-or-done-button-on.html because the number pad doesn't have a return key... (and a touch gesture outside the keypad might conflict with selecting a cell)
-    func addDoneAndCurrentLocationButtonsOnKeyboard()
-    {
-        
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRectMake(0, 0, self.tableView.bounds.size.width, 50))
-        doneToolbar.barStyle = .Default
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(TableViewController.doneButtonAction))
-        
-        let currentLocationButton: UIBarButtonItem = UIBarButtonItem(title: "Use Current Location", style: .Done, target: self, action: #selector(TableViewController.startGettingCurrentLocation))
-        
-        var items = [UIBarButtonItem]()
-        items.append(currentLocationButton)
-        items.append(flexSpace)
-        items.append(done)
-        doneToolbar.items = items
-        
-        doneToolbar.sizeToFit()
-        
-        self.zipCodeTextField.inputAccessoryView = doneToolbar
-        self.zipCodeTextField.inputAccessoryView = doneToolbar
-        
-    }
-    func doneButtonAction()
-    {
-        self.zipCodeTextField.resignFirstResponder()
-        if(zipCodeTextField.text?.characters.count == 5){
-            let newZip = Int(zipCodeTextField.text!)!
-            
-            let newWeatherData = WeatherData(zipCode: newZip)
-            sharedData.data.append(newWeatherData)
-            self.tableView.reloadData()
-            openWeatherClient.updateCurrentTemperature(newWeatherData)
-        }
-    }
-    
-//    // MARK: API Request
-//    private func updateCurrentTemperature(withData: WeatherData) {
-//        
-//        
-//        // create session and request
-//        let session = NSURLSession.sharedSession()
-//        let request = NSURLRequest(URL: getCurrentWeatherURL(withData.zipCode))
-//        
-//        // create network request
-//        let task = session.dataTaskWithRequest(request) { (data, response, error) in
-//            
-//            // if an error occurs, print it and re-enable the UI
-//            func displayError(error: String) {
-//                print(error)
-//                print("error")
-//            }
-//            
-//            /* GUARD: Was there an error? */
-//            guard (error == nil) else {
-//                displayError("There was an error with your request: \(error)")
-//                return
-//            }
-//            
-//            /* GUARD: Did we get a successful 2XX response? */
-//            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-//                displayError("Your request returned a status code other than 2xx!")
-//                return
-//            }
-//            
-//            /* GUARD: Was there any data returned? */
-//            guard let data = data else {
-//                displayError("No data was returned by the request!")
-//                return
-//            }
-//            
-//            // parse the data
-//            let parsedResult: AnyObject!
-//            do {
-//                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-//            } catch {
-//                displayError("Could not parse the data as JSON: '\(data)'")
-//                return
-//            }
-//            
-//            
-//            
-//            guard let weatherDictionary = parsedResult["main"] as? [String:Double] else {
-//                print(parsedResult)
-//                return
-//            }
-//            
-//            if let coordDictionary = parsedResult["coord"] as? [String:Double]{
-//                print("received coords")
-//                withData.latitude = coordDictionary["lat"]
-//                withData.longitude = coordDictionary["lon"]
-//                print(withData.latitude)
-//                print(withData.longitude)
-//            }
-//            
-//            if let temperature = weatherDictionary["temp"]{
-//                print("yes")
-//                print(temperature)
-//                withData.currentTemperature = temperature
-//                dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-//                    self.tableView.reloadData()
-//                }
-//            }
-//            
-//        }
-//        
-//        // start the task
-//        task.resume()
-//    }
-//    
-//    private func getForecastForWeatherData(weatherData:WeatherData){
-//        print("getting forecast")
-//        guard let url = getForecastURL(weatherData) else{
-//            zipCodeTextField.text = "Can't connect for detailed data."
-//            return
-//        }
-//        print(url)
-//        // create session and request
-//        let session = NSURLSession.sharedSession()
-//        let request = NSURLRequest(URL: url)
-//        
-//        // create network request
-//        let task = session.dataTaskWithRequest(request) { (data, response, error) in
-//            
-//            // if an error occurs, print it and re-enable the UI
-//            func displayError(error: String) {
-//                print(error)
-//                print("error")
-//            }
-//            
-//            /* GUARD: Was there an error? */
-//            guard (error == nil) else {
-//                displayError("There was an error with your request: \(error)")
-//                return
-//            }
-//            
-//            /* GUARD: Did we get a successful 2XX response? */
-//            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-//                displayError("Your request returned a status code other than 2xx!")
-//                return
-//            }
-//            
-//            /* GUARD: Was there any data returned? */
-//            guard let data = data else {
-//                displayError("No data was returned by the request!")
-//                return
-//            }
-//            
-//            // parse the data
-//            let parsedResult: AnyObject!
-//            do {
-//                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-//            } catch {
-//                displayError("Could not parse the data as JSON: '\(data)'")
-//                return
-//            }
-//            
-//            
-//            var fiveDayArray = [DailyForecast]()
-//            guard let list = parsedResult.objectForKey("list") as? [AnyObject] else{
-//                print("couldn't parse list")
-//                return
-//            }
-//            
-//            for i in list {
-//                let time = i["dt"] as! Double
-//                let date = self.dayStringFromTime(time)
-//                
-//                let minTemp = i["temp"]!!["min"] as! Double
-//                let maxTemp = i["temp"]!!["max"] as! Double
-//                
-//                let forecast = DailyForecast(date: date, minTempKelvin: minTemp, maxTempKelvin: maxTemp)
-//                fiveDayArray.append(forecast)
-//            }
-//            print(fiveDayArray)
-//            let currentTemp = String(format: "%.0f", weatherData.currentTemperature!) + self.sharedData.degreeLabel
-//            dispatch_async(dispatch_get_main_queue()){
-//                self.instantiateDetailView(fiveDayArray, currentTemperature: currentTemp)
-//            }
-//        }
-//        task.resume()
-//    }
-    func instantiateDetailView(fiveDayArray: [DailyForecast], currentTemperature:String){
-        let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
-        controller.fiveDayArray = fiveDayArray
-        controller.currentTemperature = currentTemperature
-        
-        navigationController!.pushViewController(controller, animated: true)
-    }
-    
-    
-    func dayStringFromTime(unixTime: Double) -> String {
-        let date = NSDate(timeIntervalSince1970: unixTime)
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: NSLocale.currentLocale().localeIdentifier)
-        dateFormatter.dateFormat = "EEEE"
-        //dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle //Set date style
-        //dateFormatter.timeZone = NSTimeZone()
-        return dateFormatter.stringFromDate(date)
-    }
+    //MARK: OpenWeatherClient Delegate Methods
     func receivedUpdatedCurrentTemperature(){
         dispatch_async(dispatch_get_main_queue()) { [unowned self] in
             self.tableView.reloadData()
@@ -366,6 +206,13 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func failedToUpdate(error:String){
         zipCodeTextField.text = error
         print(error)
+    }
+    func instantiateDetailView(fiveDayArray: [DailyForecast], currentTemperature:String){
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
+        controller.fiveDayArray = fiveDayArray
+        controller.currentTemperature = currentTemperature
+        
+        navigationController!.pushViewController(controller, animated: true)
     }
 }
 
