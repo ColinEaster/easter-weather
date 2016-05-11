@@ -20,6 +20,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewWillAppear(animated: Bool) {
         sharedData.data = SharedData.sharedInstance.data
         
+        // remove to update Fahrenheit/Celsius
+        let allAnnotations = self.mapView.annotations
+        self.mapView.removeAnnotations(allAnnotations)
+        
         mapView.delegate = self
         
         var annotations = [MKPointAnnotation]()
@@ -38,7 +42,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             var temperature:String = "No temperature data found."
             
             if let temp = datum.currentTemperature{
-                temperature = String(format: "%.1f", temp) + "°"
+                temperature = "Current Temperature: " + String(format: "%.1f", temp) + sharedData.degreeLabel
             }
             
             // create the annotation and set its coordiate, title, and subtitle properties
