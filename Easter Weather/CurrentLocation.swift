@@ -23,6 +23,7 @@ class LocationGetter: NSObject, CLLocationManagerDelegate{
         
     }
     func startGettingZipCode(){
+        if(foundZipCode){delegate?.alreadyFoundCurrentZipCode();return}
         locationManager.startUpdatingLocation()
     }
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
@@ -65,4 +66,5 @@ class LocationGetter: NSObject, CLLocationManagerDelegate{
 protocol LocationGetterDelegate {
     func receiveCurrentZipCode(zipCode: Int)
     func couldNotGetCurrentZipCode()
+    func alreadyFoundCurrentZipCode()
 }

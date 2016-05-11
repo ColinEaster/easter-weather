@@ -55,7 +55,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.addDoneButtonOnKeyboard()
+        self.addDoneAndCurrentLocationButtonsOnKeyboard()
         
         // RESET PERSISTENT DATA
         //let appDomain = NSBundle.mainBundle().bundleIdentifier!
@@ -81,18 +81,24 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 updateCurrentTemperature(weatherData)
             }
         }
-        startGettingCurrentLocation()
+        
     }
     private func setDefaultTemperatureUnit(fahrenheit: Bool){
         sharedData.fahrenheit = fahrenheit
         if(fahrenheit){degreeChangeButton.setTitle(Constants.degreesCelsius, forState: .Normal)}
         else{degreeChangeButton.setTitle(Constants.degreesFahrenheit, forState: .Normal)}
     }
-    private func startGettingCurrentLocation(){
+    func startGettingCurrentLocation(){
+        self.zipCodeTextField.resignFirstResponder()
+        self.zipCodeTextField.text = "Retrieving current location..."
+        
+        locationGetter.foundZipCode = false
         locationGetter.delegate = self
         locationGetter.startGettingZipCode()
     }
     func receiveCurrentZipCode(zipCode: Int) {
+        self.zipCodeTextField.text = ""
+        
         let weatherData = WeatherData(zipCode: zipCode)
         sharedData.data.append(weatherData)
         updateCurrentTemperature(weatherData)
@@ -103,6 +109,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     func couldNotGetCurrentZipCode(){
         zipCodeTextField.text = "Couldn't retreive the current location."
+    }
+    func alreadyFoundCurrentZipCode(){
+        zipCodeTextField.text = "Already found the current location."
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -145,7 +154,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     // taken from http://iostechsolutions.blogspot.com/2014/11/swift-add-uitoolbar-or-done-button-on.html because the number pad doesn't have a return key... (and a touch gesture outside the keypad might conflict with selecting a cell)
-    func addDoneButtonOnKeyboard()
+    func addDoneAndCurrentLocationButtonsOnKeyboard()
     {
         
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRectMake(0, 0, self.tableView.bounds.size.width, 50))
@@ -153,7 +162,10 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
         let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(TableViewController.doneButtonAction))
         
+        let currentLocationButton: UIBarButtonItem = UIBarButtonItem(title: "Use Current Location", style: .Done, target: self, action: #selector(TableViewController.startGettingCurrentLocation))
+        
         var items = [UIBarButtonItem]()
+        items.append(currentLocationButton)
         items.append(flexSpace)
         items.append(done)
         doneToolbar.items = items
