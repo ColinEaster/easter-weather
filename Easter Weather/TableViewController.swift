@@ -8,10 +8,11 @@
 
 import UIKit
 
-class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LocationGetterDelegate {
     
     let sharedData = SharedData.sharedInstance
     let storedData = NSUserDefaults.standardUserDefaults()
+    let locationGetter = LocationGetter()
     
     let zipCodeDelegate = ZipCodeTextFieldDelegate()
     
@@ -80,13 +81,29 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 updateCurrentTemperature(weatherData)
             }
         }
+        startGettingCurrentLocation()
     }
     private func setDefaultTemperatureUnit(fahrenheit: Bool){
         sharedData.fahrenheit = fahrenheit
         if(fahrenheit){degreeChangeButton.setTitle(Constants.degreesCelsius, forState: .Normal)}
         else{degreeChangeButton.setTitle(Constants.degreesFahrenheit, forState: .Normal)}
     }
-    
+    private func startGettingCurrentLocation(){
+        locationGetter.delegate = self
+        locationGetter.startGettingZipCode()
+    }
+    func receiveCurrentZipCode(zipCode: Int) {
+        let weatherData = WeatherData(zipCode: zipCode)
+        sharedData.data.append(weatherData)
+        updateCurrentTemperature(weatherData)
+        self.tableView.reloadData()
+        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+            self.tableView.reloadData()
+        }
+    }
+    func couldNotGetCurrentZipCode(){
+        zipCodeTextField.text = "Couldn't retreive the current location."
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
