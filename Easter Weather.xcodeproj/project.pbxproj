@@ -140,10 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				3B2429691CE0DE300030FE5A /* AppDelegate.swift */,
-				3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */,
-				3B7F93951CE2CF19002BB46D /* CurrentLocation.swift */,
-				3B7F938B1CE25E0D002BB46D /* WeatherData.swift */,
-				3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */,
+				3B7F93A91CE34D6B002BB46D /* Model */,
 				3B7F93A41CE31A2F002BB46D /* Controller */,
 				3B7F93A31CE3193B002BB46D /* View */,
 				3B24296F1CE0DE300030FE5A /* Main.storyboard */,
@@ -178,6 +175,7 @@
 			children = (
 				3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */,
 				3B7F937F1CE11806002BB46D /* TemperatureCell.swift */,
+				3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -191,6 +189,16 @@
 				3B24296D1CE0DE300030FE5A /* MapViewController.swift */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		3B7F93A91CE34D6B002BB46D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */,
+				3B7F93951CE2CF19002BB46D /* CurrentLocation.swift */,
+				3B7F938B1CE25E0D002BB46D /* WeatherData.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
