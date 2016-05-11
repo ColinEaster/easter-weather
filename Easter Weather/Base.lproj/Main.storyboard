@@ -139,8 +139,8 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="FQl-hQ-T87" firstAttribute="leading" secondItem="3f2-br-Q5U" secondAttribute="leadingMargin" constant="125" id="3Ts-ru-wVc"/>
-                                                <constraint firstItem="fm2-Ad-OEo" firstAttribute="leading" secondItem="FQl-hQ-T87" secondAttribute="trailing" constant="36" id="DaE-up-0Dw"/>
+                                                <constraint firstItem="FQl-hQ-T87" firstAttribute="leading" secondItem="3f2-br-Q5U" secondAttribute="leadingMargin" constant="110" id="3Ts-ru-wVc"/>
+                                                <constraint firstItem="fm2-Ad-OEo" firstAttribute="leading" secondItem="FQl-hQ-T87" secondAttribute="trailing" constant="30" id="DaE-up-0Dw"/>
                                                 <constraint firstItem="OWy-Rj-9fT" firstAttribute="centerY" secondItem="3f2-br-Q5U" secondAttribute="centerY" id="P0n-bg-Blz"/>
                                                 <constraint firstItem="fm2-Ad-OEo" firstAttribute="centerY" secondItem="3f2-br-Q5U" secondAttribute="centerY" id="cri-Du-ac2"/>
                                                 <constraint firstItem="FQl-hQ-T87" firstAttribute="centerY" secondItem="3f2-br-Q5U" secondAttribute="centerY" id="d4E-ud-1FX"/>
@@ -173,6 +173,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="shareButton" destination="8RT-2n-bbA" id="VgG-78-53r"/>
                         <outlet property="tableView" destination="Bsh-fw-0tX" id="h0e-rJ-S45"/>
                     </connections>
                 </viewController>

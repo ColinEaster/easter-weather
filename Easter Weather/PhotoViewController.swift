@@ -19,6 +19,7 @@ class PhotoViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     // MARK: –
     override func viewDidLoad() {
+        
         temperatureLabel.text = currentTemperature
         takeAPhoto()
     }

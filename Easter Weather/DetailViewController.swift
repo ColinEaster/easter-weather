@@ -16,6 +16,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     var currentTemperature:String!
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var shareButton: UIButton!
     
     
     
@@ -27,6 +28,8 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.tableFooterView = UIView(frame:CGRectZero)
         self.navigationController?.navigationBarHidden = false
         self.title = "Five Day Forecast"
+        
+        shareButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
     }
     
     // MARK: Table View Delegate Methods
