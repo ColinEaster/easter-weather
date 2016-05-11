@@ -22,13 +22,14 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     @IBAction func degreeChangeButtonPressed(sender: UIButton) {
         if(SharedData.sharedInstance.fahrenheit){
-            SharedData.sharedInstance.fahrenheit = false
+            sharedData.fahrenheit = false
             sender.setTitle(Constants.degreesFahrenheit, forState: .Normal)
         }else{
-            SharedData.sharedInstance.fahrenheit = true
+            sharedData.fahrenheit = true
             sender.setTitle(Constants.degreesCelsius, forState: .Normal)
         }
         tableView.reloadData()
+        storedData.setBool(sharedData.fahrenheit, forKey: "displayFahrenheit")
     }
     override func viewWillDisappear(animated: Bool) {
         print("view will disappear")
@@ -59,15 +60,17 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         //let appDomain = NSBundle.mainBundle().bundleIdentifier!
         //NSUserDefaults.standardUserDefaults().removePersistentDomainForName(appDomain)
         
+        
+        
         // set defaults
-        
-        
         let pathForDefaults = NSBundle.mainBundle().pathForResource("Default Settings", ofType: "plist")
         let defaultDictionary = NSDictionary(contentsOfFile: pathForDefaults!)
         print(defaultDictionary)
         
         storedData.registerDefaults(defaultDictionary as! [String : AnyObject])
         print(storedData.boolForKey("displayFahrenheit"))
+        setDefaultTemperatureUnit(storedData.boolForKey("displayFahrenheit"))
+        
         if let zipCodeArray = storedData.arrayForKey("storedZipCode") as? [Int]{
             print("converted")
             print(zipCodeArray)
@@ -78,7 +81,12 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
         }
     }
-
+    private func setDefaultTemperatureUnit(fahrenheit: Bool){
+        sharedData.fahrenheit = fahrenheit
+        if(fahrenheit){degreeChangeButton.setTitle(Constants.degreesCelsius, forState: .Normal)}
+        else{degreeChangeButton.setTitle(Constants.degreesFahrenheit, forState: .Normal)}
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
