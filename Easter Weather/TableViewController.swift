@@ -51,6 +51,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         //sharedData.data = SharedData.sharedInstance.data
         print(sharedData.data.count)
+        self.navigationController?.navigationBarHidden = true
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -339,8 +340,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func instantiateDetailView(fiveDayArray: [DailyForecast]){
         let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
         controller.fiveDayArray = fiveDayArray
-        //navigationController!.pushViewController(controller, animated: true)
-        presentViewController(controller, animated: true, completion: nil)
+        navigationController!.pushViewController(controller, animated: true)
+        //presentViewController(controller, animated: true, completion: nil)
     }
     func getCurrentWeatherURL(zipCode: Int)->NSURL{
         let url:String = Constants.ApiString + Methods.ZIP + String(zipCode) + ",us" + Constants.ApiKey

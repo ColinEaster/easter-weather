@@ -20,6 +20,8 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.dataSource = self
         
         self.tableView.tableFooterView = UIView(frame:CGRectZero)
+        self.navigationController?.navigationBarHidden = false
+        self.title = "Five Day Forecast"
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
