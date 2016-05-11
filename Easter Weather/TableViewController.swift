@@ -11,6 +11,7 @@ import UIKit
 class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     let sharedData = SharedData.sharedInstance
+    let storedData = NSUserDefaults.standardUserDefaults()
     
     let zipCodeDelegate = ZipCodeTextFieldDelegate()
     
@@ -30,7 +31,12 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.reloadData()
     }
     override func viewWillDisappear(animated: Bool) {
-    
+        print("view will disappear")
+        var zipCodeArray = [Int]()
+        for datum in sharedData.data{
+            zipCodeArray.append(datum.zipCode)
+        }
+        storedData.setObject(zipCodeArray, forKey: "storedZipCode")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -46,8 +52,31 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
         self.addDoneButtonOnKeyboard()
+        
+        // RESET PERSISTENT DATA
+        //let appDomain = NSBundle.mainBundle().bundleIdentifier!
+        //NSUserDefaults.standardUserDefaults().removePersistentDomainForName(appDomain)
+        
+        // set defaults
+        
+        
+        let pathForDefaults = NSBundle.mainBundle().pathForResource("Default Settings", ofType: "plist")
+        let defaultDictionary = NSDictionary(contentsOfFile: pathForDefaults!)
+        print(defaultDictionary)
+        
+        storedData.registerDefaults(defaultDictionary as! [String : AnyObject])
+        print(storedData.boolForKey("displayFahrenheit"))
+        if let zipCodeArray = storedData.arrayForKey("storedZipCode") as? [Int]{
+            print("converted")
+            print(zipCodeArray)
+            for code in zipCodeArray{
+                let weatherData = WeatherData(zipCode: code)
+                sharedData.data.append(weatherData)
+                updateCurrentTemperature(weatherData)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -115,6 +144,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.zipCodeTextField.resignFirstResponder()
         if(zipCodeTextField.text?.characters.count == 5){
             let newZip = Int(zipCodeTextField.text!)!
+            
             let newWeatherData = WeatherData(zipCode: newZip)
             sharedData.data.append(newWeatherData)
             self.tableView.reloadData()
@@ -172,7 +202,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 print(parsedResult)
                 return
             }
-            print(parsedResult)
             
             if let coordDictionary = parsedResult["coord"] as? [String:Double]{
                 print("received coords")

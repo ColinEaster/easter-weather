@@ -27,6 +27,9 @@
 		3B7F938C1CE25E0D002BB46D /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F938B1CE25E0D002BB46D /* WeatherData.swift */; };
 		3B7F938D1CE25E0D002BB46D /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F938B1CE25E0D002BB46D /* WeatherData.swift */; };
 		3B7F938E1CE25E0D002BB46D /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F938B1CE25E0D002BB46D /* WeatherData.swift */; };
+		3B7F93921CE2B6E7002BB46D /* Default Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F93911CE2B6E7002BB46D /* Default Settings.plist */; };
+		3B7F93931CE2B6E7002BB46D /* Default Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F93911CE2B6E7002BB46D /* Default Settings.plist */; };
+		3B7F93941CE2B6E7002BB46D /* Default Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F93911CE2B6E7002BB46D /* Default Settings.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +68,7 @@
 		3B7F93831CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZipCodeTextFieldDelegate.swift; sourceTree = "<group>"; };
 		3B7F93871CE246E0002BB46D /* OpenWeatherClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenWeatherClient.swift; sourceTree = "<group>"; };
 		3B7F938B1CE25E0D002BB46D /* WeatherData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
+		3B7F93911CE2B6E7002BB46D /* Default Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Default Settings.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +130,7 @@
 				3B2429721CE0DE300030FE5A /* Assets.xcassets */,
 				3B2429741CE0DE300030FE5A /* LaunchScreen.storyboard */,
 				3B2429771CE0DE300030FE5A /* Info.plist */,
+				3B7F93911CE2B6E7002BB46D /* Default Settings.plist */,
 			);
 			path = "Easter Weather";
 			sourceTree = "<group>";
@@ -254,6 +259,7 @@
 			files = (
 				3B2429761CE0DE300030FE5A /* LaunchScreen.storyboard in Resources */,
 				3B2429731CE0DE300030FE5A /* Assets.xcassets in Resources */,
+				3B7F93921CE2B6E7002BB46D /* Default Settings.plist in Resources */,
 				3B2429711CE0DE300030FE5A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +268,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B7F93931CE2B6E7002BB46D /* Default Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B7F93941CE2B6E7002BB46D /* Default Settings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
