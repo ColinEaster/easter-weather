@@ -320,8 +320,12 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
 //            //print(list)
 //          
             var fiveDayArray = [DailyForecast]()
-            var loc = parsedResult.objectForKey("list") as! [AnyObject]
-            for i in loc {
+            guard let list = parsedResult.objectForKey("list") as? [AnyObject] else{
+                print("couldn't parse list")
+                return
+            }
+            
+            for i in list {
                 let time = i["dt"] as! Double
                 let date = self.dayStringFromTime(time)
                 
@@ -330,9 +334,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 
                 let forecast = DailyForecast(date: date, minTempKelvin: minTemp, maxTempKelvin: maxTemp)
                 fiveDayArray.append(forecast)
-//                print(i["dt"])
-//                print(i["temp"]!!["min"])
-//                i["temp"]!!["min"]
             }
             print(fiveDayArray)
         }
