@@ -108,10 +108,10 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     func couldNotGetCurrentZipCode(){
-        zipCodeTextField.text = "Couldn't retreive the current location."
+        zipCodeTextField.text = "Couldn't retrieve location"
     }
     func alreadyFoundCurrentZipCode(){
-        zipCodeTextField.text = "Already found the current location."
+        zipCodeTextField.text = "Already found the current location"
     }
     
     // MARK: TableView Delegate Methods
@@ -135,8 +135,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         if let temperature = sharedData.data[indexPath.row].currentTemperature{
             cell.temperatureLabel.text = String(format: "%.1f", temperature) + SharedData.sharedInstance.degreeLabel
-        }else{cell.temperatureLabel.text = ""}
-        //cell.temperatureLabel.text = String(data[indexPath.row].currentTemperature)
+        }else{cell.temperatureLabel.text = "No connection"}
         
         return cell
     }
@@ -265,7 +264,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     private func getForecastForWeatherData(weatherData:WeatherData){
         print("getting forecast")
         guard let url = getForecastURL(weatherData) else{
-            zipCodeTextField.text = "Can't get detailed data."
+            zipCodeTextField.text = "Can't connect for detailed data."
             return
         }
         print(url)
