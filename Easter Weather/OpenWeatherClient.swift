@@ -193,7 +193,7 @@ class OpenWeatherClient{
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: NSLocale.currentLocale().localeIdentifier)
         dateFormatter.dateFormat = "EEEE"
-        //dateFormatter.timeZone = NSTimeZone()
+        dateFormatter.timeZone = NSTimeZone.localTimeZone() // should put it in the correct time zone, but I haven't tested it enough
         return dateFormatter.stringFromDate(date)
     }
 }
