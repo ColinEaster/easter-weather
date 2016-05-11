@@ -8,13 +8,14 @@
 
 import UIKit
 
-class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LocationGetterDelegate {
+class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LocationGetterDelegate, OpenWeatherClientDelegate {
     
     // MARK: Properties
     let sharedData = SharedData.sharedInstance
     let storedData = NSUserDefaults.standardUserDefaults()
-    let locationGetter = LocationGetter()
     
+    let locationGetter = LocationGetter()
+    let openWeatherClient = OpenWeatherClient()
     let zipCodeDelegate = ZipCodeTextFieldDelegate()
     
     @IBOutlet weak var tableView: UITableView!
@@ -47,6 +48,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewWillAppear(animated: Bool) {
         tableView.delegate = self
         tableView.dataSource = self
+        openWeatherClient.delegate = self
         
         self.tableView.tableFooterView = UIView(frame:CGRectZero)
         
@@ -76,7 +78,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             for code in zipCodeArray{
                 let weatherData = WeatherData(zipCode: code)
                 sharedData.data.append(weatherData)
-                updateCurrentTemperature(weatherData)
+                openWeatherClient.updateCurrentTemperature(weatherData)
             }
         }
         
@@ -101,7 +103,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let weatherData = WeatherData(zipCode: zipCode)
         sharedData.data.append(weatherData)
-        updateCurrentTemperature(weatherData)
+        openWeatherClient.updateCurrentTemperature(weatherData)
         self.tableView.reloadData()
         dispatch_async(dispatch_get_main_queue()) { [unowned self] in
             self.tableView.reloadData()
@@ -118,7 +120,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         // show 5 day view
-        getForecastForWeatherData(sharedData.data[indexPath.row])
+        openWeatherClient.getForecastForWeatherData(sharedData.data[indexPath.row])
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -183,177 +185,164 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             let newWeatherData = WeatherData(zipCode: newZip)
             sharedData.data.append(newWeatherData)
             self.tableView.reloadData()
-            updateCurrentTemperature(newWeatherData)
+            openWeatherClient.updateCurrentTemperature(newWeatherData)
         }
     }
     
-    // MARK: API Request
-    private func updateCurrentTemperature(withData: WeatherData) {
-        
-        
-        // create session and request
-        let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: getCurrentWeatherURL(withData.zipCode))
-        
-        // create network request
-        let task = session.dataTaskWithRequest(request) { (data, response, error) in
-            
-            // if an error occurs, print it and re-enable the UI
-            func displayError(error: String) {
-                print(error)
-                print("error")
-            }
-            
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                displayError("There was an error with your request: \(error)")
-                return
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                displayError("Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                displayError("No data was returned by the request!")
-                return
-            }
-            
-            // parse the data
-            let parsedResult: AnyObject!
-            do {
-                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-            } catch {
-                displayError("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            
-            
-            
-            guard let weatherDictionary = parsedResult["main"] as? [String:Double] else {
-                print(parsedResult)
-                return
-            }
-            
-            if let coordDictionary = parsedResult["coord"] as? [String:Double]{
-                print("received coords")
-                withData.latitude = coordDictionary["lat"]
-                withData.longitude = coordDictionary["lon"]
-                print(withData.latitude)
-                print(withData.longitude)
-            }
-            
-            if let temperature = weatherDictionary["temp"]{
-                print("yes")
-                print(temperature)
-                withData.currentTemperature = temperature
-                dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-                    self.tableView.reloadData()
-                }
-            }
-            
-        }
-        
-        // start the task
-        task.resume()
-    }
-    
-    private func getForecastForWeatherData(weatherData:WeatherData){
-        print("getting forecast")
-        guard let url = getForecastURL(weatherData) else{
-            zipCodeTextField.text = "Can't connect for detailed data."
-            return
-        }
-        print(url)
-        // create session and request
-        let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: url)
-        
-        // create network request
-        let task = session.dataTaskWithRequest(request) { (data, response, error) in
-            
-            // if an error occurs, print it and re-enable the UI
-            func displayError(error: String) {
-                print(error)
-                print("error")
-            }
-            
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                displayError("There was an error with your request: \(error)")
-                return
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
-                displayError("Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            /* GUARD: Was there any data returned? */
-            guard let data = data else {
-                displayError("No data was returned by the request!")
-                return
-            }
-            
-            // parse the data
-            let parsedResult: AnyObject!
-            do {
-                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
-            } catch {
-                displayError("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            
-            
-            var fiveDayArray = [DailyForecast]()
-            guard let list = parsedResult.objectForKey("list") as? [AnyObject] else{
-                print("couldn't parse list")
-                return
-            }
-            
-            for i in list {
-                let time = i["dt"] as! Double
-                let date = self.dayStringFromTime(time)
-                
-                let minTemp = i["temp"]!!["min"] as! Double
-                let maxTemp = i["temp"]!!["max"] as! Double
-                
-                let forecast = DailyForecast(date: date, minTempKelvin: minTemp, maxTempKelvin: maxTemp)
-                fiveDayArray.append(forecast)
-            }
-            print(fiveDayArray)
-            let currentTemp = String(format: "%.0f", weatherData.currentTemperature!) + self.sharedData.degreeLabel
-            dispatch_async(dispatch_get_main_queue()){
-                self.instantiateDetailView(fiveDayArray, currentTemperature: currentTemp)
-            }
-        }
-        task.resume()
-    }
+//    // MARK: API Request
+//    private func updateCurrentTemperature(withData: WeatherData) {
+//        
+//        
+//        // create session and request
+//        let session = NSURLSession.sharedSession()
+//        let request = NSURLRequest(URL: getCurrentWeatherURL(withData.zipCode))
+//        
+//        // create network request
+//        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+//            
+//            // if an error occurs, print it and re-enable the UI
+//            func displayError(error: String) {
+//                print(error)
+//                print("error")
+//            }
+//            
+//            /* GUARD: Was there an error? */
+//            guard (error == nil) else {
+//                displayError("There was an error with your request: \(error)")
+//                return
+//            }
+//            
+//            /* GUARD: Did we get a successful 2XX response? */
+//            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+//                displayError("Your request returned a status code other than 2xx!")
+//                return
+//            }
+//            
+//            /* GUARD: Was there any data returned? */
+//            guard let data = data else {
+//                displayError("No data was returned by the request!")
+//                return
+//            }
+//            
+//            // parse the data
+//            let parsedResult: AnyObject!
+//            do {
+//                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+//            } catch {
+//                displayError("Could not parse the data as JSON: '\(data)'")
+//                return
+//            }
+//            
+//            
+//            
+//            guard let weatherDictionary = parsedResult["main"] as? [String:Double] else {
+//                print(parsedResult)
+//                return
+//            }
+//            
+//            if let coordDictionary = parsedResult["coord"] as? [String:Double]{
+//                print("received coords")
+//                withData.latitude = coordDictionary["lat"]
+//                withData.longitude = coordDictionary["lon"]
+//                print(withData.latitude)
+//                print(withData.longitude)
+//            }
+//            
+//            if let temperature = weatherDictionary["temp"]{
+//                print("yes")
+//                print(temperature)
+//                withData.currentTemperature = temperature
+//                dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+//                    self.tableView.reloadData()
+//                }
+//            }
+//            
+//        }
+//        
+//        // start the task
+//        task.resume()
+//    }
+//    
+//    private func getForecastForWeatherData(weatherData:WeatherData){
+//        print("getting forecast")
+//        guard let url = getForecastURL(weatherData) else{
+//            zipCodeTextField.text = "Can't connect for detailed data."
+//            return
+//        }
+//        print(url)
+//        // create session and request
+//        let session = NSURLSession.sharedSession()
+//        let request = NSURLRequest(URL: url)
+//        
+//        // create network request
+//        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+//            
+//            // if an error occurs, print it and re-enable the UI
+//            func displayError(error: String) {
+//                print(error)
+//                print("error")
+//            }
+//            
+//            /* GUARD: Was there an error? */
+//            guard (error == nil) else {
+//                displayError("There was an error with your request: \(error)")
+//                return
+//            }
+//            
+//            /* GUARD: Did we get a successful 2XX response? */
+//            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+//                displayError("Your request returned a status code other than 2xx!")
+//                return
+//            }
+//            
+//            /* GUARD: Was there any data returned? */
+//            guard let data = data else {
+//                displayError("No data was returned by the request!")
+//                return
+//            }
+//            
+//            // parse the data
+//            let parsedResult: AnyObject!
+//            do {
+//                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+//            } catch {
+//                displayError("Could not parse the data as JSON: '\(data)'")
+//                return
+//            }
+//            
+//            
+//            var fiveDayArray = [DailyForecast]()
+//            guard let list = parsedResult.objectForKey("list") as? [AnyObject] else{
+//                print("couldn't parse list")
+//                return
+//            }
+//            
+//            for i in list {
+//                let time = i["dt"] as! Double
+//                let date = self.dayStringFromTime(time)
+//                
+//                let minTemp = i["temp"]!!["min"] as! Double
+//                let maxTemp = i["temp"]!!["max"] as! Double
+//                
+//                let forecast = DailyForecast(date: date, minTempKelvin: minTemp, maxTempKelvin: maxTemp)
+//                fiveDayArray.append(forecast)
+//            }
+//            print(fiveDayArray)
+//            let currentTemp = String(format: "%.0f", weatherData.currentTemperature!) + self.sharedData.degreeLabel
+//            dispatch_async(dispatch_get_main_queue()){
+//                self.instantiateDetailView(fiveDayArray, currentTemperature: currentTemp)
+//            }
+//        }
+//        task.resume()
+//    }
     func instantiateDetailView(fiveDayArray: [DailyForecast], currentTemperature:String){
         let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
         controller.fiveDayArray = fiveDayArray
         controller.currentTemperature = currentTemperature
         
         navigationController!.pushViewController(controller, animated: true)
-        //presentViewController(controller, animated: true, completion: nil)
     }
-    func getCurrentWeatherURL(zipCode: Int)->NSURL{
-        let url:String = Constants.ApiString + Methods.ZIP + String(zipCode) + ",us" + Constants.ApiKey
-        return NSURL(string: url)!
-    }
-    func getForecastURL(weatherData: WeatherData)->NSURL?{
-        guard let lat = weatherData.latitude, long = weatherData.longitude else{
-            print("no long/lat")
-            return nil
-        }
     
-        let url:String = Constants.ApiString + Methods.Forecast + "lat=\(lat)&lon=\(long)" + Methods.Count + "5" + Constants.ApiKey
-        return NSURL(string: url)
-    }
     
     func dayStringFromTime(unixTime: Double) -> String {
         let date = NSDate(timeIntervalSince1970: unixTime)
@@ -363,6 +352,20 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         //dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle //Set date style
         //dateFormatter.timeZone = NSTimeZone()
         return dateFormatter.stringFromDate(date)
+    }
+    func receivedUpdatedCurrentTemperature(){
+        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+            self.tableView.reloadData()
+        }
+    }
+    func receivedForecast(fiveDayArray: [DailyForecast], currentTemperature:String){
+        dispatch_async(dispatch_get_main_queue()){
+            self.instantiateDetailView(fiveDayArray, currentTemperature: currentTemperature)
+        }
+    }
+    func failedToUpdate(error:String){
+        zipCodeTextField.text = error
+        print(error)
     }
 }
 
