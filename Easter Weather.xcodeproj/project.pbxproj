@@ -40,6 +40,9 @@
 		3B7F93A01CE3191C002BB46D /* DetailViewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */; };
 		3B7F93A11CE3191C002BB46D /* DetailViewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */; };
 		3B7F93A21CE3191C002BB46D /* DetailViewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */; };
+		3B7F93A61CE32AC2002BB46D /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93A51CE32AC2002BB46D /* PhotoViewController.swift */; };
+		3B7F93A71CE32AC2002BB46D /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93A51CE32AC2002BB46D /* PhotoViewController.swift */; };
+		3B7F93A81CE32AC2002BB46D /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F93A51CE32AC2002BB46D /* PhotoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +86,7 @@
 		3B7F93991CE2CF94002BB46D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3B7F939B1CE3175F002BB46D /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		3B7F939F1CE3191C002BB46D /* DetailViewTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewTableCell.swift; sourceTree = "<group>"; };
+		3B7F93A51CE32AC2002BB46D /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +187,7 @@
 			children = (
 				3B24296B1CE0DE300030FE5A /* TableViewController.swift */,
 				3B7F939B1CE3175F002BB46D /* DetailViewController.swift */,
+				3B7F93A51CE32AC2002BB46D /* PhotoViewController.swift */,
 				3B24296D1CE0DE300030FE5A /* SecondViewController.swift */,
 			);
 			name = Controller;
@@ -332,6 +337,7 @@
 				3B7F93801CE11806002BB46D /* TemperatureCell.swift in Sources */,
 				3B7F93A01CE3191C002BB46D /* DetailViewTableCell.swift in Sources */,
 				3B24296C1CE0DE300030FE5A /* TableViewController.swift in Sources */,
+				3B7F93A61CE32AC2002BB46D /* PhotoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +350,7 @@
 				3B7F93A11CE3191C002BB46D /* DetailViewTableCell.swift in Sources */,
 				3B7F938D1CE25E0D002BB46D /* WeatherData.swift in Sources */,
 				3B7F93851CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
+				3B7F93A71CE32AC2002BB46D /* PhotoViewController.swift in Sources */,
 				3B2429811CE0DE310030FE5A /* Easter_WeatherTests.swift in Sources */,
 				3B7F93891CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
 				3B7F939D1CE3175F002BB46D /* DetailViewController.swift in Sources */,
@@ -359,6 +366,7 @@
 				3B7F93A21CE3191C002BB46D /* DetailViewTableCell.swift in Sources */,
 				3B7F938E1CE25E0D002BB46D /* WeatherData.swift in Sources */,
 				3B7F93861CE15AD6002BB46D /* ZipCodeTextFieldDelegate.swift in Sources */,
+				3B7F93A81CE32AC2002BB46D /* PhotoViewController.swift in Sources */,
 				3B24298C1CE0DE310030FE5A /* Easter_WeatherUITests.swift in Sources */,
 				3B7F938A1CE246E0002BB46D /* OpenWeatherClient.swift in Sources */,
 				3B7F939E1CE3175F002BB46D /* DetailViewController.swift in Sources */,

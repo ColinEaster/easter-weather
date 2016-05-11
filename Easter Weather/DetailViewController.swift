@@ -9,12 +9,16 @@
 import Foundation
 import UIKit
 
-class DetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var fiveDayArray:[DailyForecast]!
+    var currentTemperature:String!
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBAction func shareButtonPressed(sender: UIButton) {
+        takeAPhoto()
+    }
     override func viewWillAppear(animated: Bool) {
         tableView.delegate = self
         tableView.dataSource = self
@@ -39,6 +43,12 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         cell.highTempLabel.text = "High: " + String(format: "%.0f", forecast.maxTemp) + SharedData.sharedInstance.degreeLabel
         
         return cell
+    }
+    
+    private func takeAPhoto() {
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotoViewController") as! PhotoViewController
+        controller.currentTemperature = self.currentTemperature
+        navigationController!.pushViewController(controller, animated: true)
     }
     
 }

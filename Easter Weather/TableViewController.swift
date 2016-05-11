@@ -331,15 +331,18 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 fiveDayArray.append(forecast)
             }
             print(fiveDayArray)
+            let currentTemp = String(format: "%.0f", weatherData.currentTemperature!) + self.sharedData.degreeLabel
             dispatch_async(dispatch_get_main_queue()){
-                self.instantiateDetailView(fiveDayArray)
+                self.instantiateDetailView(fiveDayArray, currentTemperature: currentTemp)
             }
         }
         task.resume()
     }
-    func instantiateDetailView(fiveDayArray: [DailyForecast]){
+    func instantiateDetailView(fiveDayArray: [DailyForecast], currentTemperature:String){
         let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
         controller.fiveDayArray = fiveDayArray
+        controller.currentTemperature = currentTemperature
+        
         navigationController!.pushViewController(controller, animated: true)
         //presentViewController(controller, animated: true, completion: nil)
     }
