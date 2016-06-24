@@ -13,4 +13,6 @@ class DetailViewCell: UITableViewCell{
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var lowTempLabel: UILabel!
     @IBOutlet weak var highTempLabel: UILabel!
+    
+    
 }

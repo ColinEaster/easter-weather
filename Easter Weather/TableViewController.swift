@@ -8,7 +8,25 @@
 
 import UIKit
 
-class TableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LocationGetterDelegate, OpenWeatherClientDelegate {
+extension TableViewController: UITableViewDataSource{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sharedData.data.count
+        
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("TemperatureCell") as! TemperatureCell
+        cell.configureWithWeatherData(sharedData.data[indexPath.row])
+        
+        return cell
+    }
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+}
+class TableViewController: UIViewController, UITableViewDelegate, LocationGetterDelegate, OpenWeatherClientDelegate {
     
     // MARK: Properties
     let sharedData = SharedData.sharedInstance
@@ -161,27 +179,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         openWeatherClient.getForecastForWeatherData(sharedData.data[indexPath.row])
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sharedData.data.count
-        
-    }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("TemperatureCell") as! TemperatureCell
-        let zip = self.sharedData.data[indexPath.row].zipCode
-        
-        cell.zipCodeLabel.text = String(zip)
-        
-        if let temperature = sharedData.data[indexPath.row].currentTemperature{
-            cell.temperatureLabel.text = String(format: "%.1f", temperature) + SharedData.sharedInstance.degreeLabel
-        }else{cell.temperatureLabel.text = "No connection"}
-        
-        return cell
-    }
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == .Delete) {
             sharedData.data.removeAtIndex(indexPath.row)
