@@ -8,25 +8,8 @@
 
 import UIKit
 
-extension TableViewController: UITableViewDataSource{
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sharedData.data.count
-        
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("TemperatureCell") as! TemperatureCell
-        cell.configureWithWeatherData(sharedData.data[indexPath.row])
-        
-        return cell
-    }
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-}
-class TableViewController: UIViewController, UITableViewDelegate, LocationGetterDelegate, OpenWeatherClientDelegate {
+
+class TableViewController: UIViewController{
     
     // MARK: Properties
     let sharedData = SharedData.sharedInstance
@@ -144,8 +127,77 @@ class TableViewController: UIViewController, UITableViewDelegate, LocationGetter
         }
     }
     
+}
+
+//MARK: OpenWeatherClient Delegate Methods
+extension TableViewController: OpenWeatherClientDelegate{
     
-    // MARK: Current Location Methods
+    func receivedUpdatedCurrentTemperature(){
+        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+            self.tableView.reloadData()
+        }
+    }
+    func receivedForecast(fiveDayArray: [DailyForecast], currentTemperature:String){
+        dispatch_async(dispatch_get_main_queue()){
+            self.instantiateDetailView(fiveDayArray, currentTemperature: currentTemperature)
+        }
+    }
+    func failedToUpdate(error:String){
+        zipCodeTextField.text = error
+        print(error)
+    }
+    func instantiateDetailView(fiveDayArray: [DailyForecast], currentTemperature:String){
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
+        controller.fiveDayArray = fiveDayArray
+        controller.currentTemperature = currentTemperature
+        
+        navigationController!.pushViewController(controller, animated: true)
+    }
+}
+
+// MARK: UITableViewDataSource Delegate Methods
+extension TableViewController: UITableViewDataSource{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return sharedData.data.count
+        
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("TemperatureCell") as! TemperatureCell
+        cell.configureWithWeatherData(sharedData.data[indexPath.row])
+        
+        return cell
+    }
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+}
+
+// MARK: TableView Delegate Methods
+extension TableViewController: UITableViewDelegate{
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        // show 5 day view
+        openWeatherClient.getForecastForWeatherData(sharedData.data[indexPath.row])
+    }
+    
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == .Delete) {
+            sharedData.data.removeAtIndex(indexPath.row)
+            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
+        
+    }
+}
+
+// MARK: Current Location Methods
+extension TableViewController: LocationGetterDelegate{
+    
     func startGettingCurrentLocation(){
         self.zipCodeTextField.resignFirstResponder()
         self.zipCodeTextField.text = "Retrieving current location..."
@@ -172,44 +224,4 @@ class TableViewController: UIViewController, UITableViewDelegate, LocationGetter
         zipCodeTextField.text = "Already found the current location"
     }
     
-    // MARK: TableView Delegate Methods
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        // show 5 day view
-        openWeatherClient.getForecastForWeatherData(sharedData.data[indexPath.row])
-    }
-    
-    
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if (editingStyle == .Delete) {
-            sharedData.data.removeAtIndex(indexPath.row)
-            
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        }
-        
-    }
-    
-    //MARK: OpenWeatherClient Delegate Methods
-    func receivedUpdatedCurrentTemperature(){
-        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-            self.tableView.reloadData()
-        }
-    }
-    func receivedForecast(fiveDayArray: [DailyForecast], currentTemperature:String){
-        dispatch_async(dispatch_get_main_queue()){
-            self.instantiateDetailView(fiveDayArray, currentTemperature: currentTemperature)
-        }
-    }
-    func failedToUpdate(error:String){
-        zipCodeTextField.text = error
-        print(error)
-    }
-    func instantiateDetailView(fiveDayArray: [DailyForecast], currentTemperature:String){
-        let controller = storyboard!.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
-        controller.fiveDayArray = fiveDayArray
-        controller.currentTemperature = currentTemperature
-        
-        navigationController!.pushViewController(controller, animated: true)
-    }
 }
-
