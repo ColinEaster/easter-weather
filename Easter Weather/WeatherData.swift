@@ -19,7 +19,7 @@ class WeatherData{
     var placeName:String?
     /**
     Returns the current temperature with units according to the setting in SharedData.
-    Set the current temperature with degrees Kelvin.
+    Set the current temperature (must be in degrees Kelvin).
     */
     var currentTemperature:Double?{
         get{
@@ -57,6 +57,7 @@ class SharedData {
     
     var data = [WeatherData]()
     
+    /** Whether to display the temperature in Fahrenheit or Celsius.*/
     var fahrenheit: Bool = true
     
     var degreeLabel: String{

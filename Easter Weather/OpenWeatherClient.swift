@@ -47,6 +47,12 @@ class OpenWeatherClient{
     var delegate: OpenWeatherClientDelegate?
     
     // MARK: Network Request Methods
+    /**
+     Sends a network request for the current temperature corresponding to the zip code in the given WeatherData and updates the temperature in the given WeatherData object.  Calls the corresponding OpenWeatherClientDelegate method depending on the response.
+     
+     - parameters:
+        - withData: The WeatherData object to be updated.
+     */
     func updateCurrentTemperature(withData: WeatherData) {
         
         
@@ -111,7 +117,12 @@ class OpenWeatherClient{
         // start the task
         task.resume()
     }
-    
+    /**
+    Sends a network request for a five day forecast corresponding to the zip code in the given WeatherData.  Calls the corresponding OpenWeatherClientDelegate method depending on the response.
+     
+     - parameters:
+     - weatherData: The WeatherData object to get the five day forecast.
+    */
     func getForecastForWeatherData(weatherData:WeatherData){
         print("getting forecast")
         guard let url = getForecastURL(weatherData) else{
@@ -179,11 +190,12 @@ class OpenWeatherClient{
         task.resume()
     }
     
-    func getCurrentWeatherURL(zipCode: Int)->NSURL{
+    // MARK: Private Helper Methods
+    private func getCurrentWeatherURL(zipCode: Int)->NSURL{
         let url:String = Constants.ApiString + Methods.ZIP + String(zipCode) + ",us" + Constants.ApiKey
         return NSURL(string: url)!
     }
-    func getForecastURL(weatherData: WeatherData)->NSURL?{
+    private func getForecastURL(weatherData: WeatherData)->NSURL?{
         guard let lat = weatherData.latitude, long = weatherData.longitude else{
             print("no long/lat")
             return nil
@@ -193,7 +205,7 @@ class OpenWeatherClient{
         return NSURL(string: url)
     }
     
-    func dayStringFromTime(unixTime: Double) -> String {
+    private func dayStringFromTime(unixTime: Double) -> String {
         let date = NSDate(timeIntervalSince1970: unixTime)
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: NSLocale.currentLocale().localeIdentifier)
