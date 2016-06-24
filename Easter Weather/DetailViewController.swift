@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class DetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class DetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // MARK: Properties
     var fiveDayArray:[DailyForecast]!
@@ -32,16 +32,27 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         shareButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
     }
     
-    // MARK: Table View Delegate Methods
+    
+    // MARK: Share Button
+    @IBAction func shareButtonPressed(sender: UIButton) {
+        presentPhotoViewController()
+    }
+    
+    private func presentPhotoViewController() {
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotoViewController") as! PhotoViewController
+        controller.currentTemperature = self.currentTemperature
+        navigationController!.pushViewController(controller, animated: true)
+    }
+    
+}
+
+// MARK: UITableViewDataSource Protocol Methods
+extension DetailViewController: UITableViewDataSource{
+    // data source
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fiveDayArray.count
         
     }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("DetailViewCell") as! DetailViewCell
@@ -53,15 +64,13 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         
         return cell
     }
-    // MARK: Share Button
-    @IBAction func shareButtonPressed(sender: UIButton) {
-        presentPhotoViewController()
-    }
+}
+
+// MARK: UITableViewDelegate Methods
+extension DetailViewController: UITableViewDelegate{
     
-    private func presentPhotoViewController() {
-        let controller = storyboard!.instantiateViewControllerWithIdentifier("PhotoViewController") as! PhotoViewController
-        controller.currentTemperature = self.currentTemperature
-        navigationController!.pushViewController(controller, animated: true)
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
 }
